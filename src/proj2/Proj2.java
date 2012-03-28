@@ -10,7 +10,19 @@ import java.util.StringTokenizer;
 
 public class Proj2 {
 
-	public static void main(String[] args) throw IOException {
+	public static void main(String[] args) throws IOException {
+		
+		/*
+		 // Importing of the ant Dargs value
+		String filepath = args[0];
+		int leverPrint = Integer.parseInt(args[1]);
+		*/
+		
+		// For Eclipse Testing ONLY!
+		
+		String filepath = "a1.cmds";
+		
+		
 		
 	}
 }
