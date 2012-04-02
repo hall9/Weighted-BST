@@ -14,6 +14,9 @@
 // ******************ERRORS********************************
 // Throws UnderflowException as appropriate
 
+
+package proj2;
+
 /**
  * Implements an unbalanced binary search tree.
  * Note that all "matching" is based on the compareTo method.
