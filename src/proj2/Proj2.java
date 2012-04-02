@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 public class Proj2 {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		/*
 		 // Importing of the ant Dargs value
@@ -22,5 +22,18 @@ public class Proj2 {
 		
 		String filepath = "a1.cmds";
 		int levelPrint = 4;
+		
+		
+		insertToTree (filepath);
+		
 	}
+	
+	static void insertToTree (String filename) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(filename));
+		
+	}
+	
+	
+	
 }
+
