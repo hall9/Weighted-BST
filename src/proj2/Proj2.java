@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class Proj2 {
-
+	
 	public static void main(String[] args) throws IOException {
 		
 		/*
@@ -20,23 +20,27 @@ public class Proj2 {
 		
 		// For Eclipse Testing ONLY!
 		
-		String filepath = "a1.cmds";
-		int levelPrint = 4;
+		String filepath = "a4.cmds";
+		int levelPrint = 10;
 		
 		
-		insertToTree (filepath);
+		treeManager tree = insertToTree (filepath);
+		System.out.println(tree.getCount() + " integers were read from " + filepath);
+		System.out.println("");
+		System.out.println("Before balancing");
+		//tree.treePrint(levelPrint);
+		System.out.println("");
+		tree.blanceTree();
 		
 	}
 	
-	static void insertToTree (String filename) throws IOException {
+	static treeManager insertToTree (String filename) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(filename));
 		
 		treeManager tree = new treeManager();
-	
 		
 		String line;
 		String element;
-		int count = 0;
 		
 		while((line = r.readLine()) != null) {
 			StringTokenizer token;
@@ -51,11 +55,13 @@ public class Proj2 {
 				}
 				else {
 					tree.insertElement(Integer.parseInt(element));
-					count += 1;
+					tree.setCount();
 				}
 				
 			}
 		}
+		
+		return tree;
 	}
 }
 

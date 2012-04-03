@@ -36,7 +36,7 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      * Insert into the tree; duplicates are ignored.
      * @param x the item to insert.
      */
-    public void insert( AnyType x )
+    public void insert( AnyType x)
     {
         root = insert( x, root );
     }
@@ -104,14 +104,47 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     /**
      * Print the tree contents in sorted order.
      */
-    public void printTree( )
+    public void printTree(int level)
     {
-        if( isEmpty( ) )
+        if( isEmpty( ) ) {
             System.out.println( "Empty tree" );
-        else
-            printTree( root );
+        }
+        else {
+            printTree( root, null, level );
+        }
     }
-
+    
+    public void findMedian ( ) {
+    	BinaryNode<AnyType> newNode = findMedian(root);
+    }
+    
+    private BinaryNode<AnyType> findMedian ( BinaryNode<AnyType> t) {
+    	
+    	int m = (t.weight +1)/2;
+    	int current_pos = 0;
+    	
+    	if (t.left != null) {
+    		current_pos = t.left.weight + 1;
+    	}	
+    	
+    	BinaryNode<AnyType> current_root = t;
+    	
+    	while (current_pos != m && t.left != null && t.right != null) {
+    		
+    		if (current_pos > m && current_root.left != null ) {
+    			current_root = current_root.left;
+    			current_pos = current_pos - current_root.right.weight - 1;
+    		}
+    		else {
+    			current_root = current_root.right;
+    			current_pos = current_pos + current_root.left.weight + 1 ;
+    		}
+    	}
+    	
+    	System.out.println("M = " + current_root.element);
+    	return current_root;
+    }
+    
     /**
      * Internal method to insert into a subtree.
      * @param x the item to insert.
@@ -121,14 +154,18 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     private BinaryNode<AnyType> insert( AnyType x, BinaryNode<AnyType> t )
     {
         if( t == null )
-            return new BinaryNode<AnyType>( x, null, null );
+            return new BinaryNode<AnyType>( x, 1, null, null );
         
         int compareResult = x.compareTo( t.element );
             
-        if( compareResult < 0 )
+        if( compareResult < 0 ) {
+        	t.weight += 1;
             t.left = insert( x, t.left );
-        else if( compareResult > 0 )
+        }
+        else if( compareResult > 0 ) {
+        	t.weight += 1;
             t.right = insert( x, t.right );
+        }
         else
             ;  // Duplicate; do nothing
         return t;
@@ -214,14 +251,100 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      * Internal method to print a subtree in sorted order.
      * @param t the node that roots the subtree.
      */
-    private void printTree( BinaryNode<AnyType> t )
+    private void printTree( BinaryNode<AnyType> t, AnyType rootElement, int level)
     {
-        if( t != null )
-        {
-            printTree( t.left );
-            System.out.println( t.element );
-            printTree( t.right );
-        }
+    	int levelPrint = 0;
+    	if (t != null)
+    	{
+    		if (rootElement == null) {
+				System.out.println("   the tree contains " + t.weight + " nodes");
+				System.out.println("   the height is " + height(t));
+				System.out.println("   the median is " + 999);
+				System.out.println("Tree contents up to level " + level);
+				System.out.println("Level " + 0 + ":");
+
+				System.out.println("   ("+ -1 + ","+ t.element + "," + t.weight + ")" );
+			}
+    		
+    	
+    		BinaryNode<AnyType> rootNode = t;
+    		System.out.println("Level " + 1 + ":");
+    		eachLevelPrint(rootNode.element, rootNode);
+    		
+    		System.out.println("");
+    		System.out.println("Level " + 2 + ":");
+    		eachLevelPrint(rootNode.left.element, rootNode.left);
+    		eachLevelPrint(rootNode.right.element, rootNode.right);
+    		
+    		System.out.println("");
+    		System.out.println("Level " + 3 + ":");
+    		eachLevelPrint(rootNode.left.left.element, rootNode.left.left);
+    		eachLevelPrint(rootNode.left.left.element, rootNode.left.right);
+    		
+    		System.out.println("");
+    		eachLevelPrint(rootNode.right.left.element, rootNode.right.left);
+    		eachLevelPrint(rootNode.right.right.element, rootNode.right.right);
+   
+    	
+    		/*
+    		for (int i = 1; i < level+1; i++) {
+    			
+    			System.out.println("Level " + i + ":");
+    			if (leftNode != null)
+    			linePrint(rootNode.element, leftNode.element, leftNode.weight);
+    			
+    			if (rightNode != null)
+    			linePrint(rootNode.element, rightNode.element, rightNode.weight);
+    			
+    			leftNode = leftNode.left;
+    			rightNode = leftNode.right;
+    			System.out.println("");
+    		}
+    		
+  
+    		
+    		if (height(t) < level+1) {
+    			levelPrint = height(t);
+    		}
+    		else {
+    			levelPrint = level;
+    		}
+    		
+    		BinaryNode<AnyType> leftNode = t.left;
+    		BinaryNode<AnyType> rightNode = t.right;
+    		
+    		for (int i=1; i < levelPrint; i++) {   
+    				System.out.println("Level " + i + ":");
+    				
+    				for (int k=0; k < Math.pow(i,2) ; k++) {
+    					eachLevelPrint(t.element, leftNode);
+    					eachLevelPrint(t.element, rightNode);
+    					leftNode = leftNode.left;
+    					rightNode = rightNode.right;
+    				}
+    		}
+    		
+    		
+    		*/
+    		
+    	}
+    }
+    
+    
+    
+    private void eachLevelPrint (AnyType rootElement, BinaryNode<AnyType> node) {
+    	if (node.left != null) {
+    		linePrint(rootElement, node.left.element, node.left.weight);
+    	}
+    	
+    	if (node.right != null) {
+    	linePrint(rootElement, node.right.element,node.right.weight);
+    	}
+    }
+    
+    private void linePrint(AnyType rootElement,  AnyType currentElement, int currentWeight) {
+   
+    	System.out.print("   ("+ rootElement + ","+ currentElement + "," + currentWeight + ")" );
     }
 
     /**
@@ -240,19 +363,21 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     private static class BinaryNode<AnyType>
     {
             // Constructors
-        BinaryNode( AnyType theElement )
+        BinaryNode( AnyType theElement, int theWeight )
         {
-            this( theElement, null, null );
+            this( theElement, theWeight, null, null );
         }
 
-        BinaryNode( AnyType theElement, BinaryNode<AnyType> lt, BinaryNode<AnyType> rt )
+        BinaryNode( AnyType theElement, int theWeight, BinaryNode<AnyType> lt, BinaryNode<AnyType> rt )
         {
             element  = theElement;
+            weight = theWeight;
             left     = lt;
             right    = rt;
         }
 
         AnyType element;            // The data in the node
+        int weight;					// The weight of the tree
         BinaryNode<AnyType> left;   // Left child
         BinaryNode<AnyType> right;  // Right child
     }
@@ -272,13 +397,13 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         System.out.println( "Checking... (no more output means success)" );
 
         for( int i = GAP; i != 0; i = ( i + GAP ) % NUMS )
-            t.insert( i );
+            t.insert( i);
 
         for( int i = 1; i < NUMS; i+= 2 )
             t.remove( i );
 
         if( NUMS < 40 )
-            t.printTree( );
+            t.printTree( 4 );
         if( t.findMin( ) != 2 || t.findMax( ) != NUMS - 2 )
             System.out.println( "FindMin or FindMax error!" );
 
