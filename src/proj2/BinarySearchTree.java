@@ -56,8 +56,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      */
     public AnyType findMin( )
     {
-        if( isEmpty( ) )
-            throw new UnderflowException( );
+        //if( isEmpty( ) )
+            //throw new UnderflowException( );
+        	
         return findMin( root ).element;
     }
 
@@ -67,8 +68,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      */
     public AnyType findMax( )
     {
-        if( isEmpty( ) )
-            throw new UnderflowException( );
+        //if( isEmpty( ) )
+            //throw new UnderflowException( );
+        	
         return findMax( root ).element;
     }
 

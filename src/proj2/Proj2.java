@@ -31,9 +31,31 @@ public class Proj2 {
 	static void insertToTree (String filename) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(filename));
 		
+		treeManager tree = new treeManager();
+	
+		
+		String line;
+		String element;
+		int count = 0;
+		
+		while((line = r.readLine()) != null) {
+			StringTokenizer token;
+			token = new StringTokenizer (line);
+			
+
+			if (token.hasMoreTokens()) {
+				element = token.nextToken();
+				
+				if ( element == "#") {
+					// do nothing
+				}
+				else {
+					tree.insertElement(Integer.parseInt(element));
+					count += 1;
+				}
+				
+			}
+		}
 	}
-	
-	
-	
 }
 
