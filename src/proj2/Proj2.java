@@ -19,8 +19,7 @@ public class Proj2 {
 		*/
 		
 		// For Eclipse Testing ONLY!
-		
-		String filepath = "a4.cmds";
+		String filepath = "a2.cmds";
 		int levelPrint = 10;
 		
 		
@@ -28,9 +27,9 @@ public class Proj2 {
 		System.out.println(tree.getCount() + " integers were read from " + filepath);
 		System.out.println("");
 		System.out.println("Before balancing");
-		//tree.treePrint(levelPrint);
+		tree.treePrint(levelPrint);
 		System.out.println("");
-		tree.blanceTree();
+		//tree.blanceTree();
 		
 	}
 	
@@ -45,19 +44,21 @@ public class Proj2 {
 		while((line = r.readLine()) != null) {
 			StringTokenizer token;
 			token = new StringTokenizer (line);
-			
 
 			if (token.hasMoreTokens()) {
 				element = token.nextToken();
-				
+		
 				if ( element == "#") {
 					// do nothing
+				}
+				
+				if ( element.equals("#")) {
+					// Do nothing skip line
 				}
 				else {
 					tree.insertElement(Integer.parseInt(element));
 					tree.setCount();
 				}
-				
 			}
 		}
 		
