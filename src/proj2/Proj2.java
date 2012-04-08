@@ -19,7 +19,7 @@ public class Proj2 {
 		*/
 		
 		// For Eclipse Testing ONLY!
-		String filepath = "a2.cmds";
+		String filepath = "a1.cmds";
 		int levelPrint = 10;
 		
 		
@@ -28,8 +28,12 @@ public class Proj2 {
 		System.out.println("");
 		System.out.println("Before balancing");
 		tree.treePrint(levelPrint);
+		
 		System.out.println("");
-		//tree.blanceTree();
+		tree.blanceTree();
+		System.out.println("");
+		System.out.println("After balancing");
+		tree.treePrint(levelPrint);
 		
 	}
 	

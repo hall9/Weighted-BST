@@ -9,14 +9,12 @@ public class treeManager {
 	BinarySearchTree tree = new BinarySearchTree();
 	int count = 0;
 	
-	
 	public treeManager () {
 		
 	}
 	
 	public void insertElement(int x){
 		tree.insert(x);
-		
 	}
 
 	public void treePrint(int level) {
@@ -32,6 +30,7 @@ public class treeManager {
 	}
 	
 	public void blanceTree() {
+		
 		tree.findMedian();
 	}
 	

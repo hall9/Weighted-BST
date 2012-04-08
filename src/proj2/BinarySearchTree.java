@@ -112,39 +112,106 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
             System.out.println( "Empty tree" );
         }
         else {
-            printTree( root, level );
+            printTree( root , level );
         }
     }
     
     public void findMedian ( ) {
-    	BinaryNode<AnyType> newNode = findMedian(root);
+    	
+    	BinaryNode<AnyType> MedianElement = null;
+    	
+    	if( isEmpty( ) ) {
+            System.out.println( "Empty tree" );
+        }
+        else if (!isBalanced(root)) {
+        	MedianElement = findMedian(root);
+        	balance(MedianElement, root);
+        }
     }
     
-    private BinaryNode<AnyType> findMedian ( BinaryNode<AnyType> t) {
+    private BinaryNode<AnyType> findMedian ( BinaryNode<AnyType> r) {
     	
-    	int m = (t.weight +1)/2;
+    	int m = (r.weight + 1)/2;
     	int current_pos = 0;
     	
-    	if (t.left != null) {
-    		current_pos = t.left.weight + 1;
+    	if (r.left != null) {
+    		current_pos = r.left.weight + 1;
     	}	
     	
-    	BinaryNode<AnyType> current_root = t;
+    	BinaryNode<AnyType> current_root = r;
     	
-    	while (current_pos != m && t.left != null && t.right != null) {
-    		
-    		if (current_pos > m && current_root.left != null ) {
-    			current_root = current_root.left;
-    			current_pos = current_pos - current_root.right.weight - 1;
+    	while (current_pos != m) {
+    		if (current_pos > m) {
+    			if (current_root.left != null) {
+    				current_root = current_root.left;
+    				if (current_root.right != null) {
+    					current_pos = current_pos - current_root.right.weight - 1;
+    				}
+    				else {
+    					current_pos = current_pos - 1;
+    				}
+    				
+    			}
     		}
     		else {
-    			current_root = current_root.right;
-    			current_pos = current_pos + current_root.left.weight + 1 ;
+    			if (current_root.right != null) {
+    				current_root = current_root.right;
+    				if (current_root.left != null)	{
+    					current_pos = current_pos + current_root.left.weight + 1;
+    				}
+    				else {
+    					current_pos = current_pos + 1;
+    				}
+    			}
     		}
     	}
     	
-    	System.out.println("M = " + current_root.element);
     	return current_root;
+    }
+    
+    private void balance(BinaryNode<AnyType> medianNode, BinaryNode<AnyType> r) {
+    	
+    	AnyType medianValue = medianNode.element;
+    	remove(medianNode.element, r);
+    	
+    	Queue<BinaryNode<AnyType>> q = new LinkedList<BinaryNode<AnyType>>();
+    	Queue<BinaryNode<AnyType>> q2 = new LinkedList<BinaryNode<AnyType>>();
+    	
+    	q.add(r);
+    	
+    	while (q.size() > 0) {
+    		BinaryNode<AnyType> n = q.poll();
+    		
+    		if (n.left !=null) {
+    			q.add(n.left);
+    			q2.add(n.left);
+    		}
+    	
+    		if (n.right != null) {
+    			q.add(n.right);
+    			q2.add(n.right);
+    		}
+    	}
+    	
+    	r.element = medianValue;
+    	r.weight = 1;
+    	r.left = null;
+    	r.right = null;
+    	
+    	for (int i = 0; i < q2.size(); i++) {
+    		BinaryNode<AnyType> n2 = q2.poll();
+    		insert(n2.element, r, n2.parent);
+    	}
+    	
+    	/*
+    	if (r.left !=null) {
+    		balance(findMedian(r.left), r.left);
+    	}
+    	
+    	if (r.right !=null) {
+    		balance(findMedian(r.right), r.right);
+    	}
+    	*/
     }
     
     /**
@@ -227,6 +294,34 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
 
         return t;
     }
+    
+    private Boolean isBalanced ( BinaryNode<AnyType> r ) {
+    	boolean balanced = false;
+    	
+    	if (r.weight ==  1) {
+    		balanced = true;
+    	}
+    	
+    	if (r.right != null && r.left != null) {
+    		int defWeight = r.right.weight - r.left.weight;
+    		
+    		if (defWeight == -1 | defWeight == 0 | defWeight == 1) {
+    			if (isBalanced(r.right) && isBalanced(r.left)) {
+    				balanced = true;
+    			}
+    		}
+    	}
+    	else {
+    		if (r.right != null && r.weight <= 2) {
+    			balanced = true;
+    		}
+    		else if ( r.left != null && r.weight <= 2) {
+    			balanced = true;
+    		}
+    	}
+    	
+    	return balanced;
+    }
 
     /**
      * Internal method to find an item in a subtree.
@@ -253,20 +348,20 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      * Internal method to print a subtree in sorted order.
      * @param t the node that roots the subtree.
      */
-    private void printTree( BinaryNode<AnyType> t, int level)
+    private void printTree(BinaryNode<AnyType> r, int level)
     {
     	Queue<BinaryNode<AnyType>> q = new LinkedList<BinaryNode<AnyType>>();
-    	q.add(root);
+    	q.add(r);
     	int printLevel = 0;
     	int maxLeafCount = 1;
     	int currentLeaf = 1;
     	int fourPerLine = 1;
-    	int maxNodePrints = t.weight;
+    	int maxNodePrints = r.weight;
     	int NodePrints = 0;
     	
-    	System.out.println("   the tree contains " + t.weight + " nodes");
-		System.out.println("   the height is " + height(t));
-		System.out.println("   the median is " + 999);
+    	System.out.println("   the tree contains " + r.weight + " nodes");
+		System.out.println("   the height is " + height(r));
+		System.out.println("   the median is " + findMedian(root).element);
 		System.out.println("Tree contents up to level " + level);
     	
 		
@@ -312,87 +407,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     		
     		currentLeaf += 1;
     	}
-    	
-    	/*
-    	int levelPrint = 0;
-    	if (t != null)
-    	{
-    		if (rootElement == null) {
-				System.out.println("   the tree contains " + t.weight + " nodes");
-				System.out.println("   the height is " + height(t));
-				System.out.println("   the median is " + 999);
-				System.out.println("Tree contents up to level " + level);
-				System.out.println("Level " + 0 + ":");
-
-				System.out.println("   ("+ -1 + ","+ t.element + "," + t.weight + ")" );
-			}
-    		
-    	
-    		BinaryNode<AnyType> rootNode = t;
-    		System.out.println("Level " + 1 + ":");
-    		eachLevelPrint(rootNode.element, rootNode);
-    		
-    		System.out.println("");
-    		System.out.println("Level " + 2 + ":");
-    		eachLevelPrint(rootNode.left.element, rootNode.left);
-    		eachLevelPrint(rootNode.right.element, rootNode.right);
-    		
-    		System.out.println("");
-    		System.out.println("Level " + 3 + ":");
-    		eachLevelPrint(rootNode.left.left.element, rootNode.left.left);
-    		eachLevelPrint(rootNode.left.left.element, rootNode.left.right);
-    		
-    		System.out.println("");
-    		eachLevelPrint(rootNode.right.left.element, rootNode.right.left);
-    		eachLevelPrint(rootNode.right.right.element, rootNode.right.right);
-   
-    	
-    		/*
-    		for (int i = 1; i < level+1; i++) {
-    			
-    			System.out.println("Level " + i + ":");
-    			if (leftNode != null)
-    			linePrint(rootNode.element, leftNode.element, leftNode.weight);
-    			
-    			if (rightNode != null)
-    			linePrint(rootNode.element, rightNode.element, rightNode.weight);
-    			
-    			leftNode = leftNode.left;
-    			rightNode = leftNode.right;
-    			System.out.println("");
-    		}
-    		
-  
-    		
-    		if (height(t) < level+1) {
-    			levelPrint = height(t);
-    		}
-    		else {
-    			levelPrint = level;
-    		}
-    		
-    		BinaryNode<AnyType> leftNode = t.left;
-    		BinaryNode<AnyType> rightNode = t.right;
-    		
-    		for (int i=1; i < levelPrint; i++) {   
-    				System.out.println("Level " + i + ":");
-    				
-    				for (int k=0; k < Math.pow(i,2) ; k++) {
-    					eachLevelPrint(t.element, leftNode);
-    					eachLevelPrint(t.element, rightNode);
-    					leftNode = leftNode.left;
-    					rightNode = rightNode.right;
-    				}
-    		}
-    		
-    		
-    		*/
-    	
     }
     
-    private void linePrint(AnyType rootElement,  AnyType currentElement, int currentWeight) {
-   
-    	
+    private void linePrint(AnyType rootElement,  AnyType currentElement, int currentWeight) { 	
     	if (rootElement == null) {
     		System.out.print("   ( -1,"+ currentElement + "," + currentWeight + ")" );
     	}
