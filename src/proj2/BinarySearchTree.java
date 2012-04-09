@@ -123,10 +123,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     	if( isEmpty( ) ) {
             System.out.println( "Empty tree" );
         }
-        else if (!isBalanced(root)) {
-        	MedianElement = findMedian(root);
-        	balance(MedianElement, root);
-        }
+       // else if (!isBalanced(root)) {
+        //	MedianElement = findMedian(root);
+       // }
     }
     
     private BinaryNode<AnyType> findMedian ( BinaryNode<AnyType> r) {
@@ -169,8 +168,63 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     	return current_root;
     }
     
-    private void balance(BinaryNode<AnyType> medianNode, BinaryNode<AnyType> r) {
+    public void balance () {
     	
+    		root = balance(findMedian(root), root);
+    		
+    }
+    
+    private BinaryNode<AnyType> balance(BinaryNode<AnyType> medianNode, BinaryNode<AnyType> r) {
+    	BinaryNode<AnyType> temp;
+    	
+    	if (r.right == medianNode) {
+    		
+    		temp = r;
+    		r = medianNode;
+    		r.parent = temp.parent;
+    		r.weight = temp.weight;
+    		if (medianNode.left != null) {
+    			temp.right = medianNode.left;
+    		}
+    		else {
+    			temp.right = null;
+    		}
+    		
+    		temp.parent = medianNode.element;
+    		
+    		if (temp.left != null && temp.right != null) {
+    			temp.weight = temp.left.weight + temp.right.weight + 1;
+    		}
+    		else {
+    			if (temp.left != null) {
+    				temp.weight = temp.left.weight + 1;
+    			}
+    			else if (temp.right != null) {
+    				temp.weight = temp.right.weight + 1;
+    			}
+    			else {
+    				temp.weight = 1;
+    			}
+    		}
+    		
+    		r.left = temp;
+    	}
+    	else if (r.left == medianNode) {
+    		
+    	}
+    	
+    	
+    	if (r.right != null) {
+    		r.right = balance(findMedian(r.right), r.right);
+    	}
+    	
+    	if (r.left != null) {
+    		r.left = balance(findMedian(r.left), r.left);
+    	}
+    	
+    	return r;
+    	
+    	/*
     	AnyType medianValue = medianNode.element;
     	remove(medianNode.element, r);
     	

@@ -31,7 +31,7 @@ public class treeManager {
 	
 	public void blanceTree() {
 		
-		tree.findMedian();
+		tree.balance();
 	}
 	
 }
