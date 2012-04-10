@@ -169,16 +169,13 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     }
     
     public void balance () {
-    	
-    		root = balance(findMedian(root), root);
-    		
+    	root = balance(findMedian(root), root);
     }
     
     private BinaryNode<AnyType> balance(BinaryNode<AnyType> medianNode, BinaryNode<AnyType> r) {
     	BinaryNode<AnyType> temp;
     	
     	if (r.right == medianNode) {
-    		
     		temp = r;
     		r = medianNode;
     		r.parent = temp.parent;
@@ -210,62 +207,122 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     		r.left = temp;
     	}
     	else if (r.left == medianNode) {
+    		temp = r;
+    		r = medianNode;
+    		r.parent = temp.parent;
+    		r.weight = temp.weight;
+    		if (medianNode.right !=null) {
+    			temp.left = medianNode.right;
+    		}
+    		else {
+    			temp.left = null;
+    		}
     		
+    		temp.parent = medianNode.element;
+    		
+    		if (temp.left != null && temp.right != null) {
+    			temp.weight = temp.left.weight + temp.right.weight + 1;
+    		}
+    		else {
+    			if (temp.left != null) {
+    				temp.weight = temp.left.weight + 1;
+    			}
+    			else if (temp.right != null) {
+    				temp.weight = temp.right.weight + 1;
+    			}
+    			else {
+    				temp.weight = 1;
+    			}
+    		}
+    		
+    		r.right = temp;
     	}
-    	
-    	
-    	if (r.right != null) {
-    		r.right = balance(findMedian(r.right), r.right);
-    	}
-    	
-    	if (r.left != null) {
-    		r.left = balance(findMedian(r.left), r.left);
+    	else {
+    		
+    		int compareResult = medianNode.element.compareTo( r.element );
+    		
+    		if ( compareResult < 0 ) {
+    			temp = r;
+    			r = balance(medianNode, r.left);
+    			
+    			r.parent = temp.parent;
+    			if(r.right != null) {
+    				temp.left = r.right; 
+    				temp.left.parent = temp.element;
+    			}
+    			else {
+    				temp.left = null;
+    			}
+    			
+    			temp.parent = r.element;
+    			
+    			if (temp.left != null && temp.right != null) {
+        			temp.weight = temp.left.weight + temp.right.weight + 1;
+        		}
+        		else {
+        			if (temp.left != null) {
+        				temp.weight = temp.left.weight + 1;
+        			}
+        			else if (temp.right != null) {
+        				temp.weight = temp.right.weight + 1;
+        			}
+        			else {
+        				temp.weight = 1;
+        			}
+        		}
+    			
+    			r.right = temp;
+    		}
+    		else if ( compareResult > 0) {
+    			temp = r;
+    			r = balance(medianNode, r.right);
+    			r.parent = temp.parent;
+    			if (r.left != null) {
+    				temp.right = r.left;
+    				temp.right.parent = temp.element;
+    			}
+    			else {
+    				temp.right = null;
+    			}
+    			
+    			temp.parent = r.element;
+        		
+        		if (temp.left != null && temp.right != null) {
+        			temp.weight = temp.left.weight + temp.right.weight + 1;
+        		}
+        		else {
+        			if (temp.left != null) {
+        				temp.weight = temp.left.weight + 1;
+        			}
+        			else if (temp.right != null) {
+        				temp.weight = temp.right.weight + 1;
+        			}
+        			else {
+        				temp.weight = 1;
+        			}
+        		}
+        		
+        		r.left = temp;
+    		}
+    		else {
+    			/*
+    			if (r.right != null && r.left != null && r.weight == 3) {
+    				
+    			}
+    			else {
+    				if (r.right != null  && r.weight > 2) {
+    					r.right = balance(findMedian(r.right), r.right);
+    				}
+
+    				if (r.left != null && r.weight > 2) {
+    					r.left = balance(findMedian(r.left), r.left);
+    				}
+    			}
+    			*/
+    		}
     	}
     	
     	return r;
-    	
-    	/*
-    	AnyType medianValue = medianNode.element;
-    	remove(medianNode.element, r);
-    	
-    	Queue<BinaryNode<AnyType>> q = new LinkedList<BinaryNode<AnyType>>();
-    	Queue<BinaryNode<AnyType>> q2 = new LinkedList<BinaryNode<AnyType>>();
-    	
-    	q.add(r);
-    	
-    	while (q.size() > 0) {
-    		BinaryNode<AnyType> n = q.poll();
-    		
-    		if (n.left !=null) {
-    			q.add(n.left);
-    			q2.add(n.left);
-    		}
-    	
-    		if (n.right != null) {
-    			q.add(n.right);
-    			q2.add(n.right);
-    		}
-    	}
-    	
-    	r.element = medianValue;
-    	r.weight = 1;
-    	r.left = null;
-    	r.right = null;
-    	
-    	for (int i = 0; i < q2.size(); i++) {
-    		BinaryNode<AnyType> n2 = q2.poll();
-    		insert(n2.element, r, n2.parent);
-    	}
-    	
-    	/*
-    	if (r.left !=null) {
-    		balance(findMedian(r.left), r.left);
-    	}
-    	
-    	if (r.right !=null) {
-    		balance(findMedian(r.right), r.right);
-    	}
-    	*/
     }
     
     /**

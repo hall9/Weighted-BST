@@ -19,7 +19,7 @@ public class Proj2 {
 		*/
 		
 		// For Eclipse Testing ONLY!
-		String filepath = "a1.cmds";
+		String filepath = "b10.cmds";
 		int levelPrint = 10;
 		
 		
