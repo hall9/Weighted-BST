@@ -1,6 +1,7 @@
 
 package proj2;
 
+import io.github.pixee.security.BoundedLineReader;
 import proj2.*;
 
 import java.io.BufferedReader;
@@ -45,7 +46,7 @@ public class Proj2 {
 		String line;
 		String element;
 		
-		while((line = r.readLine()) != null) {
+		while((line = BoundedLineReader.readLine(r, 5_000_000)) != null) {
 			StringTokenizer token;
 			token = new StringTokenizer (line);
 
