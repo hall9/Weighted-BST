@@ -57,7 +57,7 @@ public class Proj2 {
 					// do nothing
 				}
 				
-				if ( element.equals("#")) {
+				if ( "#".equals(element)) {
 					// Do nothing skip line
 				}
 				else {
